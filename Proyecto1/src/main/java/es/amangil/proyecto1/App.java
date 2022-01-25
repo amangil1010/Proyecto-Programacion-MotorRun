@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -41,15 +42,27 @@ public class App extends Application {
     
     int velocidad = 5 ;
     
+    int giro = 0;
+    int giro2 = 0;
+    
     Image desierto = new Image(getClass().getResourceAsStream("/images/Desierto.jpg"));
     ImageView desiertoView = new ImageView(desierto);
 
     Image desierto2 = new Image(getClass().getResourceAsStream("/images/Desierto.jpg"));
     ImageView desiertoView2 = new ImageView(desierto2);
     
+    Image roca = new Image(getClass().getResourceAsStream("/images/roca.png"));
+    ImageView rocaView = new ImageView(roca);
+
+    Image cactus = new Image(getClass().getResourceAsStream("/images/cactus.png"));
+    ImageView cactusView=  new ImageView(cactus);
+    
     Group grupoLinea1 = new Group();
 
     Group grupoMoto = new Group();
+    
+    Group grupoRoca = new Group();
+
 
     
     @Override
@@ -97,6 +110,15 @@ public class App extends Application {
         
         
         //Moto
+        //Marco de la moto
+        Rectangle marco = new Rectangle();
+        marco.setWidth(80);
+        marco.setHeight(40);
+        marco.setFill(Color.RED);
+        marco.setVisible(false);
+        grupoMoto.getChildren().add(marco);
+
+        //Rueda
         Circle rueda1 = new Circle();
         rueda1.setRadius(12); 
         rueda1.setCenterX(15);
@@ -208,19 +230,42 @@ public class App extends Application {
         desiertoView2.setX(1250);
         root.getChildren().add(desiertoView2);
 
+        //roca
+        rocaView.setY(425);
+        rocaView.setX(1000);
+        Rectangle marcoRoca = new Rectangle();
+        marcoRoca.setY(425);
+        marcoRoca.setX(1000);
+        marco.setWidth(40);
+        marco.setHeight(40);
+        marco.setFill(Color.RED);
+        //marco.setVisible(false);
+        grupoRoca.getChildren().add(marcoRoca);
+        grupoRoca.getChildren().add(rocaView);
+        root.getChildren().add(grupoRoca);
+
+        
+        
+        
+        //cactus
+        cactusView.setY(425);
+        cactusView.setX(900);
+        //root.getChildren().add(cactusView);
+
         
         
         //Movimiento de la imagen Y lineas
         Timeline animationDesierto = new Timeline(
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
-                //System.out.println(desiertoX);
+               
+                //Fondo
                 desiertoView.setX(desiertoX);
                 desiertoX -= 3;
                 
-                //System.out.println(desiertoX2);
                 desiertoView2.setX(desiertoX2);
                 desiertoX2 -= 3;
                 
+               
                 if (desiertoX < -1377) {
                 desiertoX = 1350;
                 }
@@ -229,27 +274,75 @@ public class App extends Application {
                 desiertoX2 = 1350;
                 }
                 
-                grupoLinea1.setLayoutX(movLinea -= 5);
+                movLinea -= 5;
+                grupoLinea1.setLayoutX(movLinea);
                 //System.out.println(movLinea);
                 
                 if (movLinea < -385) {
                 movLinea = 0;
                 }
 
-                if (grupoMotoY > 525){
-                velocidad = +5;
+                
+                //IF para que la moto no se salga por pantalla
+                if (grupoMotoY >= 525){
+                    grupoMotoY -= 5;
+                    grupoMoto.setLayoutY(grupoMotoY);
                 }
 
                 if (grupoMotoY < 310){
-                    velocidad = -5;
+                    grupoMotoY += 5;
+                    grupoMoto.setLayoutY(grupoMotoY);
                 }
 
+                if (grupoMotoX <= 5){
+                    grupoMotoX += 5;
+                    grupoMoto.setLayoutX(grupoMotoX);
+                }
+                
+                if (grupoMotoX >= 1015){
+                    grupoMotoX -= 5;
+                    grupoMoto.setLayoutX(grupoMotoX);
+                }
+                
+                //OBSTACULOS
+                //giro
+                giro -= 5;
+                rocaView.setRotate(giro);
+                
+                giro2 -= 5;
+                cactusView.setRotate(giro2);
+                
+                
+                //COLISION
+                //Shape.intersect(marco, rocaView);
+
+                //Shape Colision = Shape.intersect(marco, rocaView);
+
+                //boolean colisionVacia = Colision.getBoundsInLocal().isEmpty();
+                
+                //if colisionVacia == false) {
+                //    grupoMoto.setLayoutY(0);
+                //}
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 })
         );
         animationDesierto.setCycleCount(Timeline.INDEFINITE);
         animationDesierto.play();
         
         root.getChildren().add(grupoLinea1);
+        root.getChildren().add(rocaView);
+        root.getChildren().add(cactusView);
+
+        
 
        //Controles de la moto 
         Ventana.setOnKeyPressed((KeyEvent event) -> {
@@ -267,13 +360,12 @@ public class App extends Application {
                 grupoMoto.setLayoutY(grupoMotoY);
             }
             
-            System.out.println(grupoMotoY);
+            System.out.println(grupoMotoX);
 
         });
         
         
 
-        
         
         
         
