@@ -45,6 +45,10 @@ public class App extends Application {
     int giro = 0;
     int giro2 = 0;
     
+    int movRocaX = 1500;
+    int movCactusX = 2000;
+
+    
     Image desierto = new Image(getClass().getResourceAsStream("/images/Desierto.jpg"));
     ImageView desiertoView = new ImageView(desierto);
 
@@ -62,7 +66,8 @@ public class App extends Application {
     Group grupoMoto = new Group();
     
     Group grupoRoca = new Group();
-
+    
+    Group grupoCactus = new Group();
 
     
     @Override
@@ -118,6 +123,7 @@ public class App extends Application {
         marco.setVisible(false);
         grupoMoto.getChildren().add(marco);
 
+        
         //Rueda
         Circle rueda1 = new Circle();
         rueda1.setRadius(12); 
@@ -126,6 +132,7 @@ public class App extends Application {
         rueda1.setFill(Color.GRAY);
         //root.getChildren().add(rueda1);
         grupoMoto.getChildren().add(rueda1);
+        
         
         Circle rueda2 = new Circle();
         rueda2.setRadius(12); 
@@ -137,43 +144,40 @@ public class App extends Application {
 
         
         Line soporteDeRueda1 = new Line(20, 20, 15, 40);
-        soporteDeRueda1.setStroke(Color.GREEN);
+        soporteDeRueda1.setStroke(Color.RED);
         soporteDeRueda1.setStrokeWidth(4);
         //root.getChildren().add(soporteDeRueda1);
         grupoMoto.getChildren().add(soporteDeRueda1);
 
-        
         
         Line soporteDeRueda2 = new Line();
         soporteDeRueda2.setStartX(70);
         soporteDeRueda2.setEndX(60);
         soporteDeRueda2.setStartY(40);
         soporteDeRueda2.setEndY(20);
-        soporteDeRueda2.setStroke(Color.GREEN);
+        soporteDeRueda2.setStroke(Color.RED);
         soporteDeRueda2.setStrokeWidth(4);
         //root.getChildren().add(soporteDeRueda2);
         grupoMoto.getChildren().add(soporteDeRueda2);
 
-        
         
         Line hierroSilla = new Line();
         hierroSilla.setStartX(23);
         hierroSilla.setEndX(59);
         hierroSilla.setStartY(20);
         hierroSilla.setEndY(20);
-        hierroSilla.setStroke(Color.GREEN);
+        hierroSilla.setStroke(Color.RED);
         hierroSilla.setStrokeWidth(10);
         //root.getChildren().add(hierroSilla);
         grupoMoto.getChildren().add(hierroSilla);
 
-        
         
         Line soporteManillar = new Line();
         soporteManillar.setStartX(61);
         soporteManillar.setEndX(61);
         soporteManillar.setStartY(20);
         soporteManillar.setEndY(0);
-        soporteManillar.setStroke(Color.GREEN);
+        soporteManillar.setStroke(Color.RED);
         soporteManillar.setStrokeWidth(5);
         //root.getChildren().add(soporteManillar);
         grupoMoto.getChildren().add(soporteManillar);
@@ -189,7 +193,6 @@ public class App extends Application {
         //root.getChildren().add(manillar);
         grupoMoto.getChildren().add(manillar);
 
-        
         
         Line reposaSilla = new Line();
         reposaSilla.setStartX(21);
@@ -214,13 +217,8 @@ public class App extends Application {
 
         
         root.getChildren().add(grupoMoto);
-
         grupoMoto.setLayoutX(grupoMotoX);
         grupoMoto.setLayoutY(grupoMotoY);
-        
-
-        
-        
         
              
         //Imagen1
@@ -230,35 +228,37 @@ public class App extends Application {
         desiertoView2.setX(1250);
         root.getChildren().add(desiertoView2);
 
-        //roca
-        rocaView.setY(425);
-        rocaView.setX(1000);
+        //ROCA-----------------
         Rectangle marcoRoca = new Rectangle();
-        marcoRoca.setY(425);
-        marcoRoca.setX(1000);
-        marco.setWidth(40);
-        marco.setHeight(40);
-        marco.setFill(Color.RED);
-        //marco.setVisible(false);
+        marcoRoca.setWidth(30);
+        marcoRoca.setHeight(30);
+        marcoRoca.setFill(Color.RED);
+        marcoRoca.setVisible(false);
         grupoRoca.getChildren().add(marcoRoca);
         grupoRoca.getChildren().add(rocaView);
-        root.getChildren().add(grupoRoca);
+        grupoRoca.setLayoutX(1500);
+        grupoRoca.setLayoutY(425);
 
         
         
         
-        //cactus
-        cactusView.setY(425);
-        cactusView.setX(900);
-        //root.getChildren().add(cactusView);
-
+        //CACTUS----------------------------------
+        Rectangle marcoCactus = new Rectangle();
+        marcoCactus.setWidth(30);
+        marcoCactus.setHeight(30);
+        marcoCactus.setFill(Color.RED);
+        marcoCactus.setVisible(false);
+        grupoCactus.getChildren().add(marcoCactus);
+        grupoCactus.getChildren().add(cactusView);
+        grupoCactus.setLayoutX(2000);
+        grupoCactus.setLayoutY(450);
         
         
         //Movimiento de la imagen Y lineas
         Timeline animationDesierto = new Timeline(
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
                
-                //Fondo
+                //Fondo----------------------
                 desiertoView.setX(desiertoX);
                 desiertoX -= 3;
                 
@@ -276,14 +276,13 @@ public class App extends Application {
                 
                 movLinea -= 5;
                 grupoLinea1.setLayoutX(movLinea);
-                //System.out.println(movLinea);
                 
                 if (movLinea < -385) {
                 movLinea = 0;
                 }
 
                 
-                //IF para que la moto no se salga por pantalla
+                //IF para que la moto no se salga por pantalla-----------------
                 if (grupoMotoY >= 525){
                     grupoMotoY -= 5;
                     grupoMoto.setLayoutY(grupoMotoY);
@@ -304,7 +303,7 @@ public class App extends Application {
                     grupoMoto.setLayoutX(grupoMotoX);
                 }
                 
-                //OBSTACULOS
+                //OBSTACULOS-----------------------------------
                 //giro
                 giro -= 5;
                 rocaView.setRotate(giro);
@@ -312,19 +311,57 @@ public class App extends Application {
                 giro2 -= 5;
                 cactusView.setRotate(giro2);
                 
+                movRocaX -= 5;
+                grupoRoca.setLayoutX(movRocaX);
                 
-                //COLISION
-                //Shape.intersect(marco, rocaView);
+                movCactusX -= 5;
+                grupoCactus.setLayoutX(movCactusX);
+                
+                System.out.println("movCactusx" + movCactusX);
+                System.out.println("Y" + grupoCactus.getLayoutY());
+                System.out.println("X" + grupoCactus.getLayoutX());
 
-                //Shape Colision = Shape.intersect(marco, rocaView);
+                
+                //COLISION Roca y moto------------------------------------
+                Shape.intersect(marco, marcoRoca);
 
-                //boolean colisionVacia = Colision.getBoundsInLocal().isEmpty();
+                Shape Colision = Shape.intersect(marco, marcoRoca);
+
+                boolean colisionVacia = Colision.getBoundsInLocal().isEmpty();
                 
-                //if colisionVacia == false) {
-                //    grupoMoto.setLayoutY(0);
-                //}
+                if (colisionVacia == false) {
+                   grupoMotoY = 420;
+                   grupoMoto.setLayoutY(grupoMotoY);
+                   grupoMotoX = 20;
+                   grupoMoto.setLayoutX(grupoMotoX);
+                   movRocaX = 1500;
+                   grupoRoca.setLayoutX(movRocaX);
+                };
                 
+                if (movRocaX == 0) {
+                   grupoRoca.setLayoutX(movRocaX = 1500);
+
+                };
+                //COLISION Cactus y moto------------------------------------
+                Shape.intersect(marco, marcoCactus);
+
+                Shape Colision2 = Shape.intersect(marco, marcoCactus);
+
+                boolean colisionVacia2 = Colision2.getBoundsInLocal().isEmpty();
                 
+                if (colisionVacia2 == false) {
+                   grupoMotoY = 420;
+                   grupoMoto.setLayoutY(grupoMotoY);
+                   grupoMotoX = 20;
+                   grupoMoto.setLayoutX(grupoMotoX);
+                   movCactusX = 2000;
+                   grupoCactus.setLayoutX(movCactusX);
+                };
+                
+                if (movCactusX == 0) {
+                   grupoCactus.setLayoutX(movCactusX = 2000);
+
+                };
                 
                 
                 
@@ -339,8 +376,8 @@ public class App extends Application {
         animationDesierto.play();
         
         root.getChildren().add(grupoLinea1);
-        root.getChildren().add(rocaView);
-        root.getChildren().add(cactusView);
+        root.getChildren().add(grupoRoca);
+        root.getChildren().add(grupoCactus);
 
         
 
@@ -358,9 +395,14 @@ public class App extends Application {
             } else if(event.getCode() == KeyCode.DOWN) {
                 grupoMotoY += velocidad;
                 grupoMoto.setLayoutY(grupoMotoY);
+            } else if(event.getCode() == KeyCode.Q) {
+                grupoMoto.setRotate(-50);                
+            } else if(event.getCode() == KeyCode.W) {
+                grupoMoto.setRotate(0);
             }
             
-            System.out.println(grupoMotoX);
+            //System.out.println(grupoMotoX);
+
 
         });
         
