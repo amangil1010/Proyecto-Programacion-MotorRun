@@ -1,5 +1,6 @@
 package es.amangil.proyecto1;
 
+import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -44,10 +45,12 @@ public class App extends Application {
     
     int giro = 0;
     int giro2 = 0;
+    int giro3 = 0;
+
     
     int movRocaX = 1500;
     int movCactusX = 2000;
-
+    int movRoca2Y = 40;
     
     Image desierto = new Image(getClass().getResourceAsStream("/images/Desierto.jpg"));
     ImageView desiertoView = new ImageView(desierto);
@@ -57,6 +60,10 @@ public class App extends Application {
     
     Image roca = new Image(getClass().getResourceAsStream("/images/roca.png"));
     ImageView rocaView = new ImageView(roca);
+    
+    Image roca2Y = new Image(getClass().getResourceAsStream("/images/roca2.png"));
+    ImageView rocaView2Y = new ImageView(roca2Y);
+
 
     Image cactus = new Image(getClass().getResourceAsStream("/images/cactus.png"));
     ImageView cactusView=  new ImageView(cactus);
@@ -67,7 +74,11 @@ public class App extends Application {
     
     Group grupoRoca = new Group();
     
+    Group grupoRoca2Y = new Group();
+    
     Group grupoCactus = new Group();
+
+    Random random = new Random();
 
     
     @Override
@@ -90,9 +101,6 @@ public class App extends Application {
         root.getChildren().add(Carretera);
         
         
-
-        
-        
         //Linea carretera superior
         for (int i=0; i< lineaXmax; i+=30) {
             Line lineaCarretera = new Line(i,325,i+10,325);
@@ -110,8 +118,7 @@ public class App extends Application {
             lineaCarretera2.setStrokeWidth(12);
             //root.getChildren().add(lineaCarretera2);
             grupoLinea1.getChildren().add(lineaCarretera2);
-        }
-                
+        }       
         
         
         //Moto
@@ -238,23 +245,29 @@ public class App extends Application {
         grupoRoca.getChildren().add(rocaView);
         grupoRoca.setLayoutX(1500);
         grupoRoca.setLayoutY(425);
-
-        
-        
+        //ROCA------------------
+        Rectangle marcoRoca2Y = new Rectangle();
+        marcoRoca2Y.setWidth(30);
+        marcoRoca2Y.setHeight(30);
+        marcoRoca2Y.setFill(Color.RED);
+        marcoRoca2Y.setVisible(false);
+        grupoRoca2Y.getChildren().add(marcoRoca2Y);
+        grupoRoca2Y.getChildren().add(rocaView2Y);
+        grupoRoca2Y.setLayoutX(30);
+        grupoRoca2Y.setLayoutY(50);
         
         //CACTUS----------------------------------
         Rectangle marcoCactus = new Rectangle();
-        marcoCactus.setWidth(30);
-        marcoCactus.setHeight(30);
+        marcoCactus.setWidth(40);
+        marcoCactus.setHeight(40);
         marcoCactus.setFill(Color.RED);
         marcoCactus.setVisible(false);
         grupoCactus.getChildren().add(marcoCactus);
         grupoCactus.getChildren().add(cactusView);
         grupoCactus.setLayoutX(2000);
         grupoCactus.setLayoutY(450);
-        
-        
-        //Movimiento de la imagen Y lineas
+                
+        //Movimiento de la imagen, lineas, obstaculos y moto
         Timeline animationDesierto = new Timeline(
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
                
@@ -311,8 +324,14 @@ public class App extends Application {
                 giro2 -= 5;
                 cactusView.setRotate(giro2);
                 
+                giro3 -= 5;
+                rocaView2Y.setRotate(giro);
+                
                 movRocaX -= 5;
                 grupoRoca.setLayoutX(movRocaX);
+                
+                movRoca2Y += 5;
+                grupoRoca2Y.setLayoutY(movRoca2Y);
                 
                 movCactusX -= 5;
                 grupoCactus.setLayoutX(movCactusX);
@@ -339,7 +358,9 @@ public class App extends Application {
                 };
                 
                 if (movRocaX == 0) {
+                   int valor = random.nextInt(300);
                    grupoRoca.setLayoutX(movRocaX = 1500);
+                   grupoRoca.setLayoutY(300 + valor);
 
                 };
                 //COLISION Cactus y moto------------------------------------
@@ -359,14 +380,35 @@ public class App extends Application {
                 };
                 
                 if (movCactusX == 0) {
-                   grupoCactus.setLayoutX(movCactusX = 2000);
+                    int valor = random.nextInt(300);
+                    grupoCactus.setLayoutX(movCactusX = 2000);
+                    grupoCactus.setLayoutY(300 + valor);
 
                 };
                 
+                Shape.intersect(marco, marcoRoca2Y);
+
+                Shape Colision3 = Shape.intersect(marco, marcoRoca2Y);
+
+                boolean colisionVacia3 = Colision3.getBoundsInLocal().isEmpty();
                 
+                if (colisionVacia3 == false) {
+                   grupoMotoY = 420;
+                   grupoMoto.setLayoutY(grupoMotoY);
+                   grupoMotoX = 20;
+                   grupoMoto.setLayoutX(grupoMotoX);
+                   movRoca2Y = 40;
+                   grupoRoca2Y.setLayoutX(movRoca2Y);
+                }
                 
+                if (movRoca2Y == 600) {
+                    int valor = random.nextInt(1100);
+                    grupoRoca2Y.setLayoutX(valor);
+                    grupoRoca2Y.setLayoutY(movRoca2Y = 40);
+
+                };
                 
-                
+                ///aleatorio------------------------------------------------------------------
                 
                 
                 
@@ -377,6 +419,7 @@ public class App extends Application {
         
         root.getChildren().add(grupoLinea1);
         root.getChildren().add(grupoRoca);
+        root.getChildren().add(grupoRoca2Y);
         root.getChildren().add(grupoCactus);
 
         
