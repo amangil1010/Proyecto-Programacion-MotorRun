@@ -36,7 +36,9 @@ public class App extends Application {
     int movLinea = 0;
     int grupoMotoX = 20;
     int grupoMotoY = 420;
-    int velocidad = 10 ;
+              
+    int velocidad = 15 ;
+    int velocidadCohete = 0;
     
     int giro = 0;
     int giro2 = 0;
@@ -47,10 +49,10 @@ public class App extends Application {
     int movCactusX = 2000;
     int movRoca2Y = 40;
     int movCactusY = 40;
-    int muroX = 5000;
+    int muroX = 4999;
             
     int puntuacion = 0;
-    
+        
     final int TEXT_SIZE = 20;
     
     //AMG-IMAGENES
@@ -84,6 +86,8 @@ public class App extends Application {
     Random random = new Random();
     
     Rectangle muro = new Rectangle();
+
+    Line cohete = new Line();
 
     
     @Override
@@ -222,6 +226,14 @@ public class App extends Application {
         Silla.setStrokeWidth(4);
         grupoMoto.getChildren().add(Silla);
 
+        //AMG-COHETE
+        cohete.setStartX(60);
+        cohete.setEndX(65);
+        cohete.setStartY(20);
+        cohete.setEndY(20);
+        cohete.setStroke(Color.YELLOW);
+        cohete.setStrokeWidth(4);
+
         
         //AMG-AÑADIR GRUPO 
         root.getChildren().add(grupoMoto);
@@ -306,11 +318,11 @@ public class App extends Application {
         //Etiqueta Puntuacion       
         Text textTitleScore = new Text ("Puntuacion:");
         textTitleScore.setFont(Font.font(TEXT_SIZE));
-        textTitleScore.setFill(Color.WHITE);
+        textTitleScore.setFill(Color.RED);
         //Sobre Puntuacion       
         Text textScore = new Text ("0");
         textScore.setFont(Font.font(TEXT_SIZE));
-        textScore.setFill(Color.WHITE);
+        textScore.setFill(Color.RED);
         //Añadir los textos a los layouts
         paneCurrentScore.getChildren().add(textTitleScore);
         paneCurrentScore.getChildren().add(textScore);
@@ -348,23 +360,43 @@ public class App extends Application {
                 if (grupoMotoY >= 525){
                     grupoMotoY -= 5;
                     grupoMoto.setLayoutY(grupoMotoY);
+                    System.out.println("Limite Infeior Grupo Moto Y " + grupoMotoY);
+
                 }
 
                 if (grupoMotoY < 310){
                     grupoMotoY += 5;
                     grupoMoto.setLayoutY(grupoMotoY);
+                    System.out.println("Limite superior Grupo Moto Y " + grupoMotoY);
                 }
 
                 if (grupoMotoX <= 5){
                     grupoMotoX += 5;
                     grupoMoto.setLayoutX(grupoMotoX);
+                    System.out.println("Limite izquierda Grupo Moto X " + grupoMotoX);
                 }
                 
                 if (grupoMotoX >= 1015){
                     grupoMotoX -= 5;
                     grupoMoto.setLayoutX(grupoMotoX);
+                    System.out.println("Limite derecha Grupo Moto X " + grupoMotoX);
                 }
                 
+                //COHETE
+                int coheteX = grupoMotoX;
+                int coheteY = grupoMotoY;
+                cohete.setLayoutX(coheteX);
+                cohete.setLayoutY(coheteY);
+                
+                if (velocidadCohete > 5) {
+                    velocidadCohete += 10;
+                    cohete.setLayoutX(coheteX + velocidadCohete);
+                }
+                //IF DE DISPARO
+                if (velocidadCohete > 1080){
+                    velocidadCohete = 0;
+                }
+
                 /////////AMG-OBSTACULOS
                 //AMG-GIRO
                 giro -= 5;
@@ -394,9 +426,6 @@ public class App extends Application {
                 
                 muroX -= 5;
                 muro.setX(muroX);
-                //System.out.println("movCactusx" + movCactusX);
-                //System.out.println("Y" + grupoCactus.getLayoutY());
-                //System.out.println("X" + grupoCactus.getLayoutX());
 
                 
                 //COLISION ROCA Y MOTO -----------------------------------
@@ -418,7 +447,7 @@ public class App extends Application {
                     movRoca2Y = 40;
                     grupoRoca2Y.setLayoutX(movRoca2Y);
                     puntuacion = 0;
-                    muroX = 5000;
+                    muroX = 4999;
                     muro.setX(muroX);
                 };
                 
@@ -449,7 +478,7 @@ public class App extends Application {
                     movRocaX = 1500;
                     grupoRoca.setLayoutX(movRocaX);
                     puntuacion = 0;
-                    muroX = 5000;
+                    muroX = 4999;
                     muro.setX(muroX);
                 };
                 
@@ -481,7 +510,7 @@ public class App extends Application {
                     movCactusY = 40;
                     grupoCactus2.setLayoutY(movCactusY);
                     puntuacion = 0;
-                    muroX = 5000;
+                    muroX = 4999;
                     muro.setX(muroX);
                 }
                 
@@ -513,7 +542,7 @@ public class App extends Application {
                     movCactusX = 2000;
                     grupoCactus.setLayoutX(movCactusX);
                     puntuacion = 0;
-                    muroX = 5000;
+                    muroX = 4999;
                     muro.setX(muroX);
                 }
                 
@@ -525,41 +554,94 @@ public class App extends Application {
                     textScore.setText(String.valueOf(puntuacion));
                 };
                 
+                //AMG-MARCO cactus Y Moto
+                Shape.intersect(marco, muro);
+                Shape Colision5 = Shape.intersect(marco, muro);
+                boolean colisionVacia5 = Colision5.getBoundsInLocal().isEmpty();
                 
+                if (colisionVacia5 == false) {
+                    grupoMotoY = 420;
+                    grupoMoto.setLayoutY(grupoMotoY);
+                    grupoMotoX = 20;
+                    grupoMoto.setLayoutX(grupoMotoX);
+                    movCactusY = 40;
+                    grupoCactus2.setLayoutY(movCactusY);
+                    movRoca2Y = 40;
+                    grupoRoca2Y.setLayoutX(movRoca2Y);
+                    movRocaX = 1500;
+                    grupoRoca.setLayoutX(movRocaX);
+                    movCactusX = 2000;
+                    grupoCactus.setLayoutX(movCactusX);
+                    puntuacion = 0;
+                    muroX = 4999;
+                    muro.setX(muroX);
+                }
+                
+                if (muroX == 5000) {
+                    puntuacion++;
+                    textScore.setText(String.valueOf(puntuacion));
+                };
+                
+                System.out.println("MuroX " + muroX);
+
+                 //AMG-MARCO cactus Y Moto
+                Shape.intersect(muro, cohete);
+                Shape Colision6 = Shape.intersect(muro, cohete);
+                boolean colisionVacia6 = Colision6.getBoundsInLocal().isEmpty();
+                
+                if (colisionVacia6 == false) {
+                    muroX = 5000;
+                    muro.setLayoutX(muroX);
+
+                }
+
                 })
         );
         animationDesierto.setCycleCount(Timeline.INDEFINITE);
         animationDesierto.play();
         
+        
+        //ROOT
         root.getChildren().add(grupoLinea1);
         root.getChildren().add(grupoRoca);
         root.getChildren().add(grupoRoca2Y);
         root.getChildren().add(grupoCactus);
         root.getChildren().add(grupoCactus2);
         root.getChildren().add(muro);
+        root.getChildren().add(cohete);
 
-        
+
        //CONTROLES DE LA MOTO 
         Ventana.setOnKeyPressed((KeyEvent event) -> {
             if(event.getCode() == KeyCode.RIGHT) {
                 grupoMotoX += velocidad;
                 grupoMoto.setLayoutX(grupoMotoX);
+                System.out.println(" Derecha Grupo Moto X " + grupoMotoY);
             } else if(event.getCode() == KeyCode.LEFT) {
                 grupoMotoX -= velocidad;
                 grupoMoto.setLayoutX(grupoMotoX);
+                System.out.println("izquierda Grupo Moto X " + grupoMotoY);
             } else if(event.getCode() == KeyCode.UP) {
                 grupoMotoY -= velocidad;
                 grupoMoto.setLayoutY(grupoMotoY);
+                System.out.println("Arriba Grupo Moto Y " + grupoMotoY);
             } else if(event.getCode() == KeyCode.DOWN) {
                 grupoMotoY += velocidad;
                 grupoMoto.setLayoutY(grupoMotoY);
+                System.out.println("Abajo Grupo Moto Y " + grupoMotoY);
             } else if(event.getCode() == KeyCode.Q) {
-                grupoMoto.setRotate(-50);                
+                grupoMoto.setRotate(-50);
+                cohete.setRotate(-50);
+                System.out.println("Haciendo el caballito");
             } else if(event.getCode() == KeyCode.W) {
                 grupoMoto.setRotate(0);
+                cohete.setRotate(0);
+                System.out.println("NO hace el caballito");
+            } else if(event.getCode() == KeyCode.SPACE) {
+                velocidadCohete += 10; 
             }
-            
-            //System.out.println(grupoMotoX);
+
+            System.out.println("Velocidad cohete " + velocidadCohete);
         });
         
 
