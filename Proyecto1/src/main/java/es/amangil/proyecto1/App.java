@@ -37,7 +37,7 @@ public class App extends Application {
     int grupoMotoX = 20;
     int grupoMotoY = 420;
               
-    int velocidad = 15 ;
+    final int velocidad = 15 ;
     int velocidadCohete = 0;
     
     int giro = 0;
@@ -49,8 +49,8 @@ public class App extends Application {
     int movCactusX = 2000;
     int movRoca2Y = 40;
     int movCactusY = 40;
-    int muroX = 4999;
-            
+    int muroX = 5000;
+    int velocidadObstaculos = 5;
     int puntuacion = 0;
         
     final int TEXT_SIZE = 20;
@@ -304,6 +304,18 @@ public class App extends Application {
         muro.setFill(Color.BROWN);
 
         
+        
+         //VICTORIA Y PRESIONA R
+        HBox paneScores2 = new HBox();
+        paneScores2.setTranslateY(425);
+        paneScores2.setMinWidth(1100);
+        paneScores2.setAlignment(Pos.CENTER);
+        paneScores2.setSpacing(100);
+        root.getChildren().add(paneScores2);
+        //
+        HBox paneCurrentScore2 = new HBox();
+        paneCurrentScore2.setSpacing(10);
+        paneScores2.getChildren().add(paneCurrentScore2);
         //Puntuaciones
         HBox paneScores = new HBox();
         paneScores.setTranslateY(20);
@@ -326,6 +338,21 @@ public class App extends Application {
         //Añadir los textos a los layouts
         paneCurrentScore.getChildren().add(textTitleScore);
         paneCurrentScore.getChildren().add(textScore);
+        //VICTORIA
+        Text textTitleScore2 = new Text ("GANASTE");
+        textTitleScore2.setFont(Font.font(TEXT_SIZE));
+        textTitleScore2.setFill(Color.BLUE);
+        textTitleScore2.setVisible(false);
+        paneCurrentScore2.getChildren().add(textTitleScore2);
+        ///////PRESIONA LA R
+        Text textTitleScore3 = new Text ("PRESIONA LA R");
+        textTitleScore3.setFont(Font.font(TEXT_SIZE));
+        textTitleScore3.setFill(Color.WHITE);
+        textTitleScore3.setLayoutX(600);
+        textTitleScore3.setLayoutY(400);
+        textTitleScore3.setVisible(false);
+        paneCurrentScore2.getChildren().add(textTitleScore3);
+
                 
         
         //AMG-MOVIMIENTO DE LA IMAGEN, LINEAS,OBSTACULOS Y MOTO
@@ -412,16 +439,16 @@ public class App extends Application {
                 cactusView2.setRotate(giro4);
                 
                 //Movimiento
-                movRocaX -= 5;
+                movRocaX -= velocidadObstaculos;
                 grupoRoca.setLayoutX(movRocaX);
                 
-                movRoca2Y += 5;
+                movRoca2Y += velocidadObstaculos;
                 grupoRoca2Y.setLayoutY(movRoca2Y);
                 
-                movCactusX -= 5;
+                movCactusX -= velocidadObstaculos;
                 grupoCactus.setLayoutX(movCactusX);
                 
-                movCactusY += 5;
+                movCactusY += velocidadObstaculos;
                 grupoCactus2.setLayoutY(movCactusY);
                 
                 muroX -= 5;
@@ -449,9 +476,12 @@ public class App extends Application {
                     puntuacion = 0;
                     muroX = 4999;
                     muro.setX(muroX);
+                    puntuacion = 0;
+                    textScore.setText(String.valueOf(puntuacion));
+                    velocidadObstaculos=5;
                 };
                 
-                if (movRocaX == 0) {
+                if (movRocaX <= 0) {
                     int valor = random.nextInt(300);
                     grupoRoca.setLayoutX(movRocaX = 1500);
                     grupoRoca.setLayoutY(300 + valor);
@@ -480,9 +510,12 @@ public class App extends Application {
                     puntuacion = 0;
                     muroX = 4999;
                     muro.setX(muroX);
+                    puntuacion = 0;
+                    textScore.setText(String.valueOf(puntuacion));
+                    velocidadObstaculos=5;
                 };
                 
-                if (movCactusX == 0) {
+                if (movCactusX <= 0) {
                     int valor = random.nextInt(300);
                     grupoCactus.setLayoutX(movCactusX = 2000);
                     grupoCactus.setLayoutY(300 + valor);
@@ -512,9 +545,12 @@ public class App extends Application {
                     puntuacion = 0;
                     muroX = 4999;
                     muro.setX(muroX);
+                    puntuacion = 0;
+                    textScore.setText(String.valueOf(puntuacion));
+                    velocidadObstaculos=5;
                 }
                 
-                if (movRoca2Y == 600) {
+                if (movRoca2Y >= 600) {
                     int valor = random.nextInt(1100);
                     grupoRoca2Y.setLayoutX(valor);
                     grupoRoca2Y.setLayoutY(movRoca2Y = 40);
@@ -544,9 +580,12 @@ public class App extends Application {
                     puntuacion = 0;
                     muroX = 4999;
                     muro.setX(muroX);
+                    puntuacion = 0;
+                    textScore.setText(String.valueOf(puntuacion));
+                    velocidadObstaculos=5;
                 }
                 
-                if (movCactusY == 600) {
+                if (movCactusY >= 600) {
                     int valor = random.nextInt(1100);
                     grupoCactus2.setLayoutX(valor);
                     grupoCactus2.setLayoutY(movCactusY = 40);
@@ -575,10 +614,12 @@ public class App extends Application {
                     puntuacion = 0;
                     muroX = 4999;
                     muro.setX(muroX);
+                    puntuacion = 0;
+                    textScore.setText(String.valueOf(puntuacion));
                 }
                 
                 if (muroX == 5000) {
-                    puntuacion++;
+                    puntuacion+=5;
                     textScore.setText(String.valueOf(puntuacion));
                 };
                 
@@ -590,11 +631,45 @@ public class App extends Application {
                 boolean colisionVacia6 = Colision6.getBoundsInLocal().isEmpty();
                 
                 if (colisionVacia6 == false) {
-                    muroX = 5000;
+                    muroX = 5010;
                     muro.setLayoutX(muroX);
 
                 }
+                
+                //////////////////////////VELOCIDAD DE OBSTACULOS
+                if (puntuacion > 25){
+                    velocidadObstaculos = 7;
+                }
+                
+                if (puntuacion > 50){
+                    velocidadObstaculos = 9;
+                }
+                
+                if (puntuacion > 75){
+                    velocidadObstaculos = 12;
+                }
 
+                 //////FINALIZACION PARTIDA
+                if (puntuacion >= 100){
+                    textTitleScore2.setVisible(true);
+                    textTitleScore3.setVisible(true);
+                    muroX = -2000;
+                    muro.setX(muroX);
+                    grupoMotoY = -420;
+                    grupoMoto.setLayoutY(grupoMotoY);
+                    grupoMotoX = -200;
+                    grupoMoto.setLayoutX(grupoMotoX);
+                    movCactusY = -400;
+                    grupoCactus2.setLayoutY(movCactusY);
+                    movRoca2Y = -400;
+                    grupoRoca2Y.setLayoutX(movRoca2Y);
+                    movRocaX = -1500;
+                    grupoRoca.setLayoutX(movRocaX);
+                    movCactusX = -2000;
+                    grupoCactus.setLayoutX(movCactusX);
+                  }
+                
+                
                 })
         );
         animationDesierto.setCycleCount(Timeline.INDEFINITE);
@@ -639,12 +714,38 @@ public class App extends Application {
                 System.out.println("NO hace el caballito");
             } else if(event.getCode() == KeyCode.SPACE) {
                 velocidadCohete += 10; 
+            } else if(event.getCode() == KeyCode.R) {
+                muroX = 4999;
+                muro.setX(muroX);
+                grupoMotoY = 420;
+                grupoMoto.setLayoutY(grupoMotoY);
+                grupoMotoX = 20;
+                grupoMoto.setLayoutX(grupoMotoX);
+                movCactusY = 40;
+                grupoCactus2.setLayoutY(movCactusY);
+                movRoca2Y = 40;
+                grupoRoca2Y.setLayoutX(movRoca2Y);
+                movRocaX = 1500;
+                grupoRoca.setLayoutX(movRocaX);
+                movCactusX = 2000;
+                grupoCactus.setLayoutX(movCactusX);
+                puntuacion = 0;
+                textScore.setText(String.valueOf(puntuacion));
+                textScore.setText(String.valueOf(puntuacion));
+                textTitleScore2.setVisible(false);
+                textTitleScore3.setVisible(false);
+                velocidadObstaculos = 5;
+
             }
 
             System.out.println("Velocidad cohete " + velocidadCohete);
         });
         
-
+        
+        
+        
+        
+      
         
         
         
