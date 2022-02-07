@@ -31,9 +31,11 @@ public class App extends Application {
     int ventanaX = 1100;
     int desiertoX = 0;
     int desiertoX2 = 1365; 
+    
     int lineaXmax = 1450;    
     int lineaX = 1450;    
     int movLinea = 0;
+    
     int grupoMotoX = 20;
     int grupoMotoY = 420;
               
@@ -51,6 +53,7 @@ public class App extends Application {
     int movCactusY = 40;
     int muroX = 5000;
     int velocidadObstaculos = 5;
+    
     int puntuacion = 0;
         
     final int TEXT_SIZE = 20;
@@ -355,7 +358,7 @@ public class App extends Application {
 
                 
         
-        //AMG-MOVIMIENTO DE LA IMAGEN, LINEAS,OBSTACULOS Y MOTO
+        //AMG-MOVIMIENTO DE LA IMAGEN, LINEAS,OBSTACULOS Y MOTO/////////////////
         Timeline animationDesierto = new Timeline(
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
                
@@ -383,7 +386,7 @@ public class App extends Application {
                 }
 
                 
-                //AMG-IF PARA QUE LA MOTO NO SE SALGA POR PANTALLA
+                //AMG-IF PARA QUE LA MOTO NO SE SALGA POR PANTALLA//////////////
                 if (grupoMotoY >= 525){
                     grupoMotoY -= 5;
                     grupoMoto.setLayoutY(grupoMotoY);
@@ -424,7 +427,7 @@ public class App extends Application {
                     velocidadCohete = 0;
                 }
 
-                /////////AMG-OBSTACULOS
+                /////////AMG-OBSTACULOS/////////////////////////////////////////
                 //AMG-GIRO
                 giro -= 5;
                 rocaView.setRotate(giro);
@@ -455,7 +458,7 @@ public class App extends Application {
                 muro.setX(muroX);
 
                 
-                //COLISION ROCA Y MOTO -----------------------------------
+                //COLISION ROCA Y MOTO -----------------------------------//////
                 Shape.intersect(marco, marcoRoca);
                 Shape Colision = Shape.intersect(marco, marcoRoca);
                 boolean colisionVacia = Colision.getBoundsInLocal().isEmpty();
@@ -489,7 +492,7 @@ public class App extends Application {
                     textScore.setText(String.valueOf(puntuacion));
 
                 };
-                //AMG-COLISION CACTUS Y MOTO
+                //AMG-COLISION CACTUS Y MOTO ///////////////////////////////////
                 Shape.intersect(marco, marcoCactus);
                 Shape Colision2 = Shape.intersect(marco, marcoCactus);
                 boolean colisionVacia2 = Colision2.getBoundsInLocal().isEmpty();
@@ -524,7 +527,7 @@ public class App extends Application {
                 };
                 
                 
-                //AMG-MARCO ROCA Y
+                //AMG-MARCO ROCA Y MOTO /////////////////////////////////////////
                 Shape.intersect(marco, marcoRoca2Y);
                 Shape Colision3 = Shape.intersect(marco, marcoRoca2Y);
                 boolean colisionVacia3 = Colision3.getBoundsInLocal().isEmpty();
@@ -559,7 +562,7 @@ public class App extends Application {
                 };
                 
                 
-               //AMG-MARCO cactus Y Moto
+               //AMG-MARCO CACTUS Y MOTO ///////////////////////////////////////
                 Shape.intersect(marco, marcoCactus2);
                 Shape Colision4 = Shape.intersect(marco, marcoCactus2);
                 boolean colisionVacia4 = Colision4.getBoundsInLocal().isEmpty();
@@ -593,7 +596,7 @@ public class App extends Application {
                     textScore.setText(String.valueOf(puntuacion));
                 };
                 
-                //AMG-MARCO cactus Y Moto
+                //AMG-MARCO cactus Y Moto///////////////////////////////////////
                 Shape.intersect(marco, muro);
                 Shape Colision5 = Shape.intersect(marco, muro);
                 boolean colisionVacia5 = Colision5.getBoundsInLocal().isEmpty();
